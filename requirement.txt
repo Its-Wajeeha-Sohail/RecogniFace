@@ -4,3 +4,4 @@ facenet
 pytorch
 opencv
 pillow
+pyttsx3
