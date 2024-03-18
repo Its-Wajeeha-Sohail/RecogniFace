@@ -5,3 +5,4 @@ pytorch
 opencv
 pillow
 pyttsx3
+time
