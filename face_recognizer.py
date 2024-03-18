@@ -69,6 +69,7 @@ for face_image in known_faces:
     if face_embeddings is not None:
         known_embeddings.append(face_embeddings)
 
+
 # Capture video from webcam or provide a video file path
 video_capture = cv2.VideoCapture(0)  # Use 0 for webcam
 camera_ready = False
@@ -109,6 +110,7 @@ while True:
         # Display the current time on the frame
         current_time = get_current_time()
         cv2.putText(frame, f"Time: {current_time}", (frame.shape[1] - 250, frame.shape[0] - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
 
         # Speak only if the recognized label changes and the person is present
         new_labels = recognized_labels - prev_recognized_labels
