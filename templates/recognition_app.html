@@ -1,0 +1,189 @@
+ <!-- not displaying the camera -->
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #video-feed {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>    
+    <form action="/start_recognition" method="post">
+        <h1>Face Recognition App</h1>
+        <video id="video-feed" src="{{ url_for('video_feed') }}" width="640" height="480" ></video>
+        <button onclick="startRecognition()">Start Recognition</button>
+    </form>
+    <script>
+        function startRecognition() {
+            fetch('/start_recognition')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Redirect to the main page after recognition
+                    window.location.href = '/';
+                });      
+              }
+
+    </script>
+</body>
+</html>   
+
+
+
+
+<!-- display the camera but not recognize well -->
+<!--  
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Face Recognition App</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }
+    
+            form {
+                text-align: center;
+                background-color: #fff;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            h1 {
+                color: #333;
+            }
+    
+            #video-feed {
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin-top: 20px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+    
+            button {
+                background-color: #4caf50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin-top: 20px;
+            }
+    
+            button:hover {
+                background-color: #45a049;
+            }
+        </style>
+</head>
+<body>    
+    <form action="/start_recognition" method="post">
+        <h1>Face Recognition App</h1>
+        <video id="video-feed" width="640" height="480" autoplay playsinline></video>
+        <button onclick="startRecognition()">Start Recognition</button>
+    </form>
+    
+    <script>
+          function startRecognition() {
+            fetch('/start_recognition')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Redirect to the main page after recognition
+                    window.location.href = '/';
+                });      
+              }
+    document.addEventListener('DOMContentLoaded', (event) => {
+    const video = document.getElementById('video-feed');
+    const startRecognitionButton = document.querySelector('button');
+
+    // Use navigator.mediaDevices.getUserMedia to access the user's camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+            video.srcObject = stream;
+            // Enable the button only when the camera is successfully accessed
+            startRecognitionButton.disabled = false;
+
+            // Add click event listener to the button
+            startRecognitionButton.addEventListener('click', () => {
+                fetch('/start_recognition')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // Redirect to the main page after recognition
+                        window.location.href = '/';
+                    });
+            });
+        })
+        .catch((error) => {
+            console.error('Error accessing camera:', error);
+        });
+});
+
+    </script>
+</body>
+</html>    -->
+
+
