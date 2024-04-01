@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Button</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+            width: 400px;
+        }
+
+        .mb-3 {
+            margin-bottom: 15px;
+        }
+
+        .mt-3 {
+            margin-top: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+            font-size: 16px;
+        }
+
+        #openCamera,
+        #closeCamera,
+        #captureImage {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #cameraFeed {
+            border-radius: 4px;
+            margin-top: 10px;
+            width: 100%; /* Set the width to 100% */
+            height: auto; /* Automatically adjust the height */
+        }
+
+        #imageCanvas {
+            border-radius: 4px;
+            margin-top: 10px;
+            width: 50%; /* Set the width to 50% */
+            height: auto; /* Automatically adjust the height */
+        }
+
+        #imageError,
+        #nameError,
+        #phoneError {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        #imageError {
+            color: red;
+        }
+
+        #imageList {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .captured-image {
+            margin: 5px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+      
+    </style>
+</head>
+
+<body>
+    <form action="/submit_form" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
+        <h1>Welcome to _____</h1>
+        <div class="mb-3 mt-3">
+            <label for="name" class="form-label">Name<span style="color: red;">*</span>:</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" required>
+            <div id="nameError" style="color: red; display: none;">Please enter your name</div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="phone" class="form-label">Phone Number<span style="color: red;">*</span>:</label>
+            <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" name="phone" required>
+            <div id="phoneError" style="color: red; display: none;">Please enter your phone number</div>
+        </div>
+        <div class="mb-3">
+            <label for="CNIC" class="form-label">CNIC:</label>
+            <input type="text" class="form-control" id="CNIC" placeholder="Enter CNIC" name="CNIC">
+        </div>        
+        <button id="openCamera" type="button">Open Camera</button>
+        <button id="closeCamera" type="button" style="display:none;">Close Camera</button> <!-- Added Close Camera button -->
+        <video id="cameraFeed" style="display:none;" width="400" height="300"></video>
+        <button id="captureImage" type="button" style="display:none;">Capture Image</button>
+        <!-- Added file input for captured image -->
+        <input type="file" name="capturedImage" style="display: none;" accept="image/*" id="capturedImageInput">
+        <canvas id="imageCanvas" style="display:none;" width="400" height="300"></canvas>
+        <div id="imageError" style="color: red; display: none;">Please capture an image</div>
+        <div id="imageList"></div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+
+    <script>
+        function validateForm() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const imageCanvas = document.getElementById('imageCanvas');
+            let isValid = true;
+    
+            // Validate Name
+            if (name.trim() === '') {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+    
+            // Validate Phone Number
+            if (phone.trim() === '') {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+    
+            // Validate Captured Image
+            if (imageCanvas.style.display === 'none') {
+                document.getElementById('imageError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('imageError').style.display = 'none';
+            }
+    
+            return isValid;
+        }
+    
+        const openCameraButton = document.getElementById('openCamera');
+        const closeCameraButton = document.getElementById('closeCamera'); // Added Close Camera button
+        const cameraFeed = document.getElementById('cameraFeed');
+        const captureImageButton = document.getElementById('captureImage');
+        const imageCanvas = document.getElementById('imageCanvas');
+        const ctx = imageCanvas.getContext('2d');
+    
+        let mediaStream = null;
+        let capturedImages = []; // Array to store captured images
+    
+        openCameraButton.addEventListener('click', () => {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then((stream) => {
+                        mediaStream = stream;
+                        cameraFeed.srcObject = stream;
+                        cameraFeed.play();
+                        cameraFeed.style.display = 'block';
+                        captureImageButton.style.display = 'block';
+                        openCameraButton.style.display = 'none'; // Hide the "Open Camera" button
+                        closeCameraButton.style.display = 'block'; // Show the "Close Camera" button
+                    })
+                    .catch((error) => {
+                        console.error('Error accessing camera:', error);
+                    });
+            } else {
+                alert('getUserMedia is not supported on your browser');
+            }
+        });
+    
+        captureImageButton.addEventListener('click', () => {
+            if (mediaStream) {
+                // Draw the current frame from the camera onto the canvas
+                ctx.drawImage(cameraFeed, 0, 0, imageCanvas.width, imageCanvas.height);
+    
+                // Save the captured image to the array
+                capturedImages.push(imageCanvas.toDataURL('image/png'));
+    
+                // Display the canvas with the captured image
+                imageCanvas.style.display = 'block';
+    
+                // Trigger the file input to select the captured image
+                const capturedImageInput = document.getElementById('capturedImageInput');
+                capturedImageInput.click();
+            }
+        });
+    
+        // Add an event listener to the file input to handle the selected file
+        capturedImageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                // Handle the selected file as needed
+                // You may want to display the selected image or perform other actions
+            }
+        });
+    
+        closeCameraButton.addEventListener('click', () => {
+            // Stop the media stream
+            if (mediaStream) {
+                const tracks = mediaStream.getTracks();
+                tracks.forEach((track) => track.stop());
+                mediaStream = null;
+    
+                // Hide camera-related elements
+                cameraFeed.style.display = 'none';
+                captureImageButton.style.display = 'none';
+    
+                // Show the "Open Camera" button
+                openCameraButton.style.display = 'block';
+                // Hide the "Close Camera" button
+                closeCameraButton.style.display = 'none';
+            }
+        });
+    
+        captureImageButton.addEventListener('click', () => {
+            if (mediaStream) {
+                // Draw the current frame from the camera onto the canvas
+                ctx.drawImage(cameraFeed, 0, 0, imageCanvas.width, imageCanvas.height);
+    
+                // Save the captured image to the array
+                capturedImages.push(imageCanvas.toDataURL('image/png'));
+    
+                // Display the canvas with the captured image
+                imageCanvas.style.display = 'block';
+    
+                // Create a blob from the canvas
+                imageCanvas.toBlob((blob) => {
+    
+                    // Create a download link
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+    
+                    // Set the filename based on the user's input
+                    const fileName = document.getElementById('name').value || 'captured_image';
+                    link.download = `${fileName}.png`;
+    
+                    // Trigger a click event to simulate a download
+                    link.click();
+    
+                    // Clean up
+                    URL.revokeObjectURL(link.href);
+                }, 'image/png');
+            }
+        });
+    
+    </script>
+</body>
+
+</html> 
