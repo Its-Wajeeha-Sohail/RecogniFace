@@ -1,8 +1,9 @@
+python
 numpy
 torch
 facenet
 pytorch
-opencv
+opencv-python
 pillow
 pyttsx3
 time

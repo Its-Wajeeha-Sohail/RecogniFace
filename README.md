@@ -22,3 +22,15 @@ This is a Python-based face recognition system that recognizes faces using the F
 ### 4. New Entity
 -If a person is new and their data is not store in database than you just need to run `registration_form.py` script , it display a form that help you to enter the new person data in your database.
 -when you capture the image from database it store only the location of image in database and image into your local device you just need to give the path where you want to store the images/dataset.
+
+## File Descriptions
+
+### 1. `recognition_app.py`
+- Main script for face recognition.
+- Initializes the FaceNet model and other necessary components.
+- Detects faces using the webcam and recognizes them.
+
+
+### 2. `registration_form.py`
+-Script for new entry registration.
+-Run the script ,form open put the all information and click the clear images 3-5 and submit the form all information automatically store in the database.
