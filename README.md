@@ -34,3 +34,6 @@ This is a Python-based face recognition system that recognizes faces using the F
 ### 2. `registration_form.py`
 -Script for new entry registration.
 -Run the script ,form open put the all information and click the clear images 3-5 and submit the form all information automatically store in the database.
+
+
+### 3. `order.py`
